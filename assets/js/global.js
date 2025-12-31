@@ -137,7 +137,7 @@ window.closeMenu = () => toggleDrawer('menu-overlay', 'menu-drawer', false);
 // ==========================================
 function initNavigationObserver() {
     const navLinks = document.querySelectorAll('.main-nav a, .mobile-menu-links a');
-    const page = window.location.pathname.split("/").pop() || 'index.html';
+    const page = window.location.pathname.split("/").pop() || 'index';
 
     const updateActiveLinks = (targetHref) => {
         navLinks.forEach(link => {
@@ -151,7 +151,7 @@ function initNavigationObserver() {
 
             // Standard Page Matching
             const isActive = (href === targetHref) || 
-                             (targetHref === 'index.html' && (href === 'index.html' || href === './'));
+                             (targetHref === 'index' && (href === 'index' || href === './'));
             link.classList.toggle('active', isActive);
         });
     };
