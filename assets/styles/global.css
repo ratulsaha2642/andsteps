@@ -193,6 +193,10 @@ header.scrolled {
     opacity: 1;
 }
 
+.main-nav a:hover::after {
+    width: 100% !important;
+}
+
 .main-nav a::after {
     content: '';
     position: absolute;
