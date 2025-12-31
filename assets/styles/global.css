@@ -1,0 +1,893 @@
+/* ================================================================
+   1. VARIABLES & DESIGN TOKENS
+================================================================ */
+:root {
+    /* Colors */
+    --bg-color: #f8f8f8;
+    --surface-color: #ffffff;
+    --text-main: #111111;
+    --text-muted: #666666;
+    --accent: #ff4d00;      /* High-energy Orange */
+    --accent-hover: #cc3d00;
+    --border: #e0e0e0;
+
+    /* Typography */
+    --font-display: 'Archivo', sans-serif;
+    --font-body: 'Manrope', sans-serif;
+
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 8rem;
+
+    /* Layout */
+    --container-width: 1400px;
+    --header-height: 80px;
+
+    /* Decorative */
+    --radius-sm: 4px;
+    --radius-md: 12px;
+    --radius-lg: 24px;
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* ================================================================
+   2. BASE RESET & GLOBAL STYLES
+================================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, 
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    max-width: 100%;
+    line-height: 1.5;
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.1;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+ul {
+    list-style: none;
+}
+
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+    outline: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+input {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 600;
+}
+
+/* Interactive Element Protections */
+img, 
+.fa, .fas, .far, .fab, 
+.material-symbols-rounded {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-drag: none;
+}
+
+/* ================================================================
+   3. UTILITY CLASSES
+================================================================ */
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    border-radius: 100px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.05em;
+}
+
+.btn-primary {
+    background-color: var(--text-main);
+    color: var(--surface-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-outline {
+    border: 1px solid var(--border);
+    color: var(--text-main);
+}
+
+.section-title {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+}
+
+/* ================================================================
+   4. HEADER & NAVIGATION
+================================================================ */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    z-index: 100;
+    transition: background 0.3s ease, padding 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+header.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.nav-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+}
+
+/* Desktop Nav (Hidden on mobile by default) */
+.main-nav {
+    display: none; 
+}
+
+.main-nav a {
+    color: var(--text-muted) !important;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.main-nav a:hover {
+    color: var(--text-main) !important;
+    opacity: 1;
+}
+
+.main-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: width;
+}
+
+.main-nav a.active {
+    color: var(--text-main) !important;
+    font-weight: 600;
+}
+
+.main-nav a.active::after {
+    width: 100% !important;
+}
+
+/* Nav Icons */
+.nav-icons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.icon-btn {
+    position: relative;
+    font-size: 1.5rem;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background: var(--accent);
+    color: white;
+    font-size: 0.7rem;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    opacity: 0; 
+}
+
+/* ================================================================
+   5. DRAWERS & OVERLAYS (Cart & Mobile Menu)
+================================================================ */
+/* Overlay Base */
+.overlay, #cart-overlay, #menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(4px);
+}
+
+.overlay.open, #cart-overlay.open, #menu-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Drawer Base */
+.drawer, #cart-drawer, #menu-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    background: var(--surface-color);
+    z-index: 10001;
+    transform: translateX(100%);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer.open, #cart-drawer.open, #menu-drawer.open {
+    transform: translateX(0);
+}
+
+/* Mobile Menu Specifics */
+.menu-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: #000;
+    opacity: 0;
+    transform: translateX(-10px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: 
+        transform 0.3s ease-in-out, 
+        opacity 0.3s ease-in-out, 
+        background-color 0.3s ease, 
+        color 0.3s ease, 
+        border-left 0.2s ease;
+    border-left: 4px solid transparent; 
+}
+
+#menu-drawer.open .menu-link {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Staggered entrance */
+#menu-drawer.open .menu-link:nth-child(1) { transition-delay: 0.1s; }
+#menu-drawer.open .menu-link:nth-child(2) { transition-delay: 0.15s; }
+#menu-drawer.open .menu-link:nth-child(3) { transition-delay: 0.2s; }
+#menu-drawer.open .menu-link:nth-child(4) { transition-delay: 0.25s; }
+#menu-drawer.open .menu-link:nth-child(5) { transition-delay: 0.3s; }
+
+.menu-link.active {
+    color: var(--accent);
+    background-color: rgba(255, 77, 0, 0.08);
+    border-left: 4px solid var(--accent);
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255, 77, 0, 0.1); 
+}
+
+/* Cart Specific Items */
+.cart-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.cart-item {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 0 20px;
+    margin-bottom: 1.5rem;
+}
+
+.cart-item img, .cart-item-img {
+    max-width: 70px;
+    max-height: 70px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #f0f0f0;
+    border-radius: var(--radius-sm);
+}
+
+.cart-item-info h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.cart-item-info p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* Cart Controls */
+.qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0;
+    background: #f8f8f8;
+    width: fit-content;
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+.qty-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #000;
+    transition: all 0.2s ease;
+}
+
+.qty-btn:hover {
+    background: var(--text-main);
+    color: #fff;
+    border-color: var(--text-main);
+}
+
+.qty-btn:active {
+    transform: scale(0.9);
+}
+
+.qty-val {
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-width: 20px;
+    text-align: center;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: #ff4d00;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    margin-top: 4px;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.cart-footer {
+    padding: 1.5rem;
+    background: #f9f9f9;
+    border-top: 1px solid var(--border);
+}
+
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    font-family: var(--font-display);
+}
+
+.cart-empty, .empty-cart-msg {
+    text-align: center;
+    color: var(--text-muted);
+    margin-top: 2rem;
+    filter: grayscale(1);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* ================================================================
+   6. HERO SECTION
+================================================================ */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding-top: var(--header-height);
+}
+
+.hero-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: 18vw;
+    color: rgba(0, 0, 0, 0.03);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.hero-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    z-index: 1;
+    width: 100%;
+}
+
+.hero-text-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    order: 2;
+    text-align: center;
+}
+
+.hero-text-wrap > * {
+    opacity: 0; 
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+.hero-title {
+    font-size: 3rem;
+    line-height: 1;
+    animation-delay: 0.2s;
+}
+
+.hero-desc {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 400px;
+    animation-delay: 0.5s;
+}
+
+.hero-cta {
+    animation-delay: 0.8s;
+}
+
+.hero-image-container {
+    order: 1;
+    position: relative;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-bottom: 60px; 
+}
+
+.hero-shoe {
+    width: 100%;
+    max-width: 850px;
+    height: auto;
+    display: block;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.2));
+    animation: float 4s ease-in-out infinite;
+}
+
+.shoe-shadow {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    max-width: 400px; 
+    height: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    filter: blur(15px);
+    z-index: 1;
+    animation: shadowPulse 4s ease-in-out infinite;
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.5;
+    z-index: 2;
+}
+
+.scroll-line {
+    width: 1px;
+    height: 40px;
+    background: var(--text-main);
+}
+
+/* ================================================================
+   7. NEWSLETTER
+================================================================ */
+.newsletter-section {
+    padding: var(--spacing-xl) var(--spacing-sm);
+    background: var(--text-main);
+    color: white;
+    text-align: center;
+    margin-top: var(--spacing-xl);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.newsletter-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.newsletter-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    flex-direction: column;
+}
+
+.newsletter-input {
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    border: none;
+    flex: 1;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 600;
+}
+
+/* ================================================================
+   8. FOOTER
+================================================================ */
+.site-footer {
+    background: var(--text-main);
+    color: white;
+    padding: var(--spacing-lg) 0 var(--spacing-md);
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+.footer-logo {
+    color: white;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.footer-description {
+    color: #aaa;
+    max-width: 300px;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.footer-col h4 {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+}
+
+.footer-links li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-links li a {
+    color: #aaa;
+    transition: color 0.3s ease;
+}
+
+.footer-links .accent-link {
+    color: var(--accent);
+}
+
+.footer-contact-info {
+    list-style: none;
+    margin-bottom: 1.5rem;
+}
+
+.footer-contact-info li {
+    color: #aaa;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1.25rem;
+}
+
+.social-icons a {
+    font-size: 1.2rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.payment-methods {
+    display: flex;
+    gap: 1rem;
+    opacity: 0.3;
+}
+
+.payment-methods i {
+    font-size: 1.4rem;
+}
+
+.footer-bottom {
+    margin-top: var(--spacing-lg);
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+}
+
+.copyright {
+    color: #666;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.footer-legal-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer-legal-links a {
+    color: #666;
+    font-size: 0.75rem;
+}
+
+/* ================================================================
+   9. ANIMATIONS & LOADER
+================================================================ */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-40px); }
+}
+
+@keyframes shadowPulse {
+    0%, 100% { 
+        transform: translateX(-50%) scale(1); 
+        opacity: 0.8; 
+    }
+    50% { 
+        transform: translateX(-50%) scale(0.6); 
+        opacity: 0.3; 
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loader {
+    position: fixed;
+    inset: 0;
+    background: #ffffff; 
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #000000;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+body.js-page-loaded #loader {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* ================================================================
+   10. INTERACTIVE STATES (Hovers & Taps)
+================================================================ */
+/* Global Transitions */
+.btn, .icon-btn, .collection-card img, .product-card, .action-btn, 
+.filter-btn, .menu-link, .footer-links li {
+    transition: all 0.3s ease;
+}
+
+/* Desktop Hover Effects */
+@media (hover: hover) {
+    .btn-primary:hover {
+        background-color: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+    }
+    .btn-outline:hover {
+        border-color: var(--text-main);
+        background: var(--surface-color);
+    }
+    .mobile-menu-links a:hover, .menu-link:hover, .menu-link:hover span {
+        color: var(--accent);
+    }
+    .footer-links li:hover, .footer-links li a:hover, .footer-legal-links a:hover {
+        color: white;
+    }
+    .social-icons a:hover {
+        color: var(--accent);
+        transform: translateY(-3px);
+    }
+}
+
+/* Mobile Active/Tap Effects */
+@media (hover: none) {
+    .btn-primary:active {
+        background-color: var(--accent);
+        transform: scale(0.98);
+    }
+    .btn-outline:active {
+        background: var(--border);
+    }
+    .menu-link:active {
+        color: var(--accent);
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+    .footer-links li:active {
+        color: white;
+    }
+}
+
+/* ================================================================
+   11. MEDIA QUERIES (DESKTOP)
+================================================================ */
+@media (min-width: 768px) {
+    /* Header */
+    .main-nav {
+        display: flex;
+        gap: 2rem;
+    }
+    .main-nav a {
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    #menu-trigger {
+        display: none;
+    }
+
+    /* Hero */
+    .hero-content {
+        grid-template-columns: 1fr 1fr;
+        text-align: left;
+    }
+    .hero-text-wrap {
+        order: 1;
+        text-align: left;
+    }
+    .hero-image-container {
+        order: 2;
+        height: 500px;
+    }
+    .hero h1 {
+        font-size: 5rem;
+    }
+
+    /* Newsletter */
+    .newsletter-form {
+        flex-direction: row;
+    }
+
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: var(--spacing-md);
+    }
+    .footer-bottom {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+    }
+}

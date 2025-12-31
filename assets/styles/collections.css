@@ -1,0 +1,137 @@
+.btn-outline {
+    border: 1px solid white;
+    color: white;
+}
+
+.btn-outline:hover {
+    background: white;
+    color: black;
+}
+
+/* --- 4.5 COLLECTIONS PAGE LAYOUT --- */
+.collections-hero {
+    padding: calc(var(--header-height) + 4rem) 0 var(--spacing-lg);
+    background: #111;
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.collections-hero h1 {
+    font-size: clamp(4rem, 15vw, 10rem);
+    color: rgba(255, 255, 255, 0.05);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.hero-title-main {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(3rem, 8vw, 6rem);
+    margin-bottom: 1rem;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+    padding: var(--spacing-lg) 0;
+}
+
+.col-card {
+    position: relative;
+    grid-column: span 12;
+    height: 500px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding: 2.5rem;
+    background: #222;
+}
+
+.col-card img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 0;
+    opacity: 0.8;
+}
+
+.col-card:hover img {
+    transform: scale(1.05);
+    opacity: 0.6;
+}
+
+.col-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
+    z-index: 1;
+}
+
+.col-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    width: 100%;
+}
+
+.col-content h2 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.col-content p {
+    color: #ccc;
+    max-width: 450px;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.badge {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: var(--accent);
+    color: white;
+    padding: 0.4rem 1rem;
+    font-weight: 800;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    border-radius: 4px;
+    z-index: 2;
+}
+
+/* Responsive Grid Sizes */
+@media (min-width: 768px) {
+    .col-card.large {
+        grid-column: span 8;
+        height: 600px;
+    }
+
+    .col-card.small {
+        grid-column: span 4;
+        height: 600px;
+    }
+
+    .col-card.wide {
+        grid-column: span 12;
+        height: 450px;
+    }
+
+    .col-card.mid {
+        grid-column: span 6;
+        height: 500px;
+    }
+}

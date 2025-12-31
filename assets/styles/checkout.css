@@ -1,0 +1,305 @@
+/* --- CHECKOUT SPECIFIC LAYOUT --- */
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+}
+
+.checkout-section {
+    margin-bottom: var(--spacing-md);
+}
+
+/* New Stepped Header Styles */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.step-number {
+    background: var(--text-main);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.form-heading {
+    font-size: 1.2rem;
+    letter-spacing: 0.02em;
+}
+
+/* Reusing your newsletter input style for consistency */
+.checkout-field {
+    width: 100%;
+    margin-bottom: 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-main);
+    background: white;
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+}
+
+/* --- PAYMENT METHOD SELECTOR --- */
+
+.payment-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.payment-option {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.2rem 0.5rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    background: white;
+}
+
+.payment-option input {
+    position: absolute;
+    opacity: 0;
+}
+
+.option-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.option-content span:last-child {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+/* Update this selector in your current CSS */
+.option-content i {
+    font-size: 24px;
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+}
+
+/* Active State for Payment Options */
+.payment-option:has(input:checked) {
+    border-color: var(--text-main);
+    background: #f4f4f4;
+}
+
+/* Ensure active state still works */
+.payment-option:has(input:checked) .option-content i {
+    color: var(--text-main);
+}
+
+.payment-card-body {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: #fcfcfc;
+}
+
+/* --- PROMO CODE SECTION --- */
+.promo-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.promo-section input {
+    flex: 1; /* Makes input take up remaining space */
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    background: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.promo-section input:focus {
+    outline: none;
+    border-color: var(--text-main);
+}
+
+.promo-section button {
+    padding: 0 1.5rem;
+    height: 45px; /* Matches standard input height */
+    background: #f4f4f4;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.promo-section button:hover {
+    background: var(--text-main);
+    color: white;
+    border-color: var(--text-main);
+}
+
+/* --- DISCOUNT ROW STYLING --- */
+#discount-row {
+    display: none; /* Hidden by default - JS will show it */
+    color: #ff4d00; /* Signature orange for savings */
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+    animation: fadeIn 0.4s ease-out;
+}
+
+#discount-amount {
+    font-weight: 700;
+}
+
+/* Subtle animation when discount appears */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- SIDEBAR & SUMMARY --- */
+
+.checkout-sidebar {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    height: fit-content;
+}
+
+/* --- SIDEBAR & SUMMARY IMAGE FIXES --- */
+
+.item-img-wrapper {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    background: var(--bg-color);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    flex-shrink: 0; 
+}
+
+.item-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    /* Fix 5: Center the shoe in the frame */
+    object-position: center;
+    display: block;
+}
+
+/* --- OPTIONAL: IMPROVED BADGE ALIGNMENT --- */
+
+.item-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--text-main); /* Changed to main for better visibility */
+    color: white;
+    font-size: 0.65rem;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2; /* Ensure it stays above the image */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* --- ALIGNMENT TWEAK FOR DETAILS --- */
+.summary-box h3 {
+    margin-bottom: 1.2rem;
+}
+
+.summary-item {
+    display: flex;
+    align-items: center; /* Vertically centers text with the image */
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+.item-details {
+    flex: 1;
+}
+
+.item-name {
+    display: block;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.item-variant {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.summary-totals {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.grand-total {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    font-weight: 900;
+    font-family: var(--font-display);
+}
+
+/* --- BUTTON UPGRADE --- */
+
+.submit-order-btn {
+    width: 100%;
+    border-radius: var(--radius-sm) !important;
+    padding: 1.4rem !important;
+    font-size: 1rem !important;
+    letter-spacing: 0.05em;
+    margin-top: 1rem;
+}
+
+/* --- RESPONSIVE --- */
+
+@media (min-width: 992px) {
+    .checkout-layout {
+        grid-template-columns: 1fr 400px;
+        align-items: start;
+        gap: var(--spacing-xl);
+    }
+
+    /* Sticky Sidebar on Desktop */
+    .checkout-sidebar {
+        position: sticky;
+        top: calc(var(--header-height) + 20px);
+    }
+}
