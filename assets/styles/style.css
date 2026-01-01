@@ -1,4 +1,7 @@
-/* --- 4.5 FEATURED COLLECTIONS --- */
+/* ==========================================
+   4.5 FEATURED COLLECTIONS & LUXURY ENGINE
+   ========================================== */
+
 .collections-section {
     padding: var(--spacing-lg) 0;
 }
@@ -96,9 +99,14 @@
     padding-bottom: 4px;
 }
 
-/* --- 5. SHOP SECTION & SINGLE-LINE FILTER --- */
+/* ==========================================
+   5. SHOP SECTION & SINGLE-LINE FILTER
+   ========================================== */
+
 .shop-section {
     padding: var(--spacing-lg) 0;
+    /* STABILITY FIX: Reserve vertical space so footer stays down */
+    min-height: 100vh; 
 }
 
 .section-title {
@@ -153,6 +161,8 @@
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2rem;
     transition: opacity 0.4s ease;
+    /* STABILITY FIX: Prevents layout collapse while products are fetching */
+    min-height: 600px; 
 }
 
 .product-card {
@@ -217,7 +227,19 @@
 .card-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
 .card-price { font-weight: 800; font-size: 1.2rem; color: var(--text-main); }
 
-/* --- HOVER & TOUCH INTERACTIONS --- */
+/* --- FOOTER FIX --- */
+.site-footer {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+body.js-page-loaded .site-footer {
+    opacity: 1;
+}
+
+/* ==========================================
+   HOVER & TOUCH INTERACTIONS
+   ========================================== */
 
 /* 1. Desktop Styles */
 @media (hover: hover) {
@@ -241,7 +263,10 @@
     .action-btn:active { background: var(--text-main); color: white; transform: scale(0.9); }
 }
 
-/* --- RESPONSIVE GRID ADJUSTMENTS --- */
+/* ==========================================
+   RESPONSIVE GRID ADJUSTMENTS
+   ========================================== */
+
 @media (min-width: 768px) {
     .collections-grid { grid-template-columns: 1fr 1fr; }
     .collection-card:first-child { grid-column: span 2; }

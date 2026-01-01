@@ -43,14 +43,17 @@
     box-sizing: border-box;
 }
 
-html, 
+html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-main);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    scroll-behavior: smooth;
     max-width: 100%;
     line-height: 1.5;
 }
@@ -84,6 +87,7 @@ img {
     display: block;
     max-width: 100%;
     height: auto;
+    content-visibility: auto; /* Optimization for low-end devices */
 }
 
 input {
@@ -155,6 +159,8 @@ header {
     transition: background 0.3s ease, padding 0.3s ease;
     display: flex;
     align-items: center;
+    will-change: transform; /* Hardware Acceleration */
+    transform: translateZ(0);
 }
 
 header.scrolled {
@@ -271,7 +277,7 @@ header.scrolled {
     visibility: visible;
 }
 
-/* Drawer Base */
+/* Drawer Base Update */
 .drawer, #cart-drawer, #menu-drawer {
     position: fixed;
     top: 0;
@@ -281,15 +287,28 @@ header.scrolled {
     height: 100vh;
     background: var(--surface-color);
     z-index: 10001;
-    transform: translateX(100%);
+    
+    /* Push it further (110%) to hide the shadow completely */
+    transform: translateX(110%); 
+    
+    /* Crucial: Prevents the drawer from existing in the layout when closed */
+    visibility: hidden; 
+    
     display: flex;
     flex-direction: column;
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    /* Animate visibility and transform together for smoothness */
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+                visibility 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    /* Keep GPU performance high */
+    will-change: transform;
 }
 
 .drawer.open, #cart-drawer.open, #menu-drawer.open {
     transform: translateX(0);
+    visibility: visible; /* Show when class is active */
 }
 
 /* Mobile Menu Specifics */
@@ -479,13 +498,14 @@ header.scrolled {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) translateZ(0); /* Hardware Acceleration */
     font-family: var(--font-display);
     font-size: 18vw;
     color: rgba(0, 0, 0, 0.03);
     white-space: nowrap;
     pointer-events: none;
     z-index: 0;
+    will-change: transform;
 }
 
 .hero-content {
@@ -547,13 +567,15 @@ header.scrolled {
     z-index: 2;
     filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.2));
     animation: float 4s ease-in-out infinite;
+    will-change: transform;
+    transform: translateZ(0); /* GPU Trigger */
 }
 
 .shoe-shadow {
     position: absolute;
     bottom: 20px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateZ(0);
     width: 50%;
     max-width: 400px; 
     height: 20px;
@@ -562,6 +584,7 @@ header.scrolled {
     filter: blur(15px);
     z-index: 1;
     animation: shadowPulse 4s ease-in-out infinite;
+    will-change: transform, opacity;
 }
 
 .scroll-indicator {
@@ -844,54 +867,161 @@ body.js-page-loaded #loader {
 }
 
 /* ================================================================
-   11. MEDIA QUERIES (DESKTOP)
+   11. COMPREHENSIVE RESPONSIVE QUERIES & OPTIMIZATIONS
 ================================================================ */
+
+/* --- Extra Small Devices (Phones under 480px) --- */
+@media (max-width: 480px) {
+    :root {
+        --header-height: 60px;
+        --spacing-lg: 2.5rem;
+        --spacing-xl: 4rem;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 0.8rem 1.5rem;
+    }
+
+    .drawer, #cart-drawer, #menu-drawer {
+        max-width: 100%;
+    }
+    
+    .hero-bg-text {
+        font-size: 25vw;
+    }
+}
+
+/* --- Small to Medium Devices (Tablets/Large Phones 481px - 767px) --- */
+@media (max-width: 767px) {
+    .container {
+        padding: 0 1.5rem;
+    }
+
+    .hero-image-container {
+        height: 250px;
+        padding-bottom: 20px;
+    }
+
+    .hero-shoe {
+        max-width: 100%;
+        transform: scale(1.1);
+    }
+
+    .newsletter-section h2 {
+        font-size: 1.8rem;
+    }
+    
+    .footer-grid {
+        text-align: center;
+        justify-items: center;
+    }
+    
+    .footer-description {
+        margin: 0 auto 1.5rem auto;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+}
+
+/* --- Medium Devices (Tablets 768px - 1024px) --- */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .hero-title {
+        font-size: 4rem;
+    }
+    
+    .hero-image-container {
+        height: 400px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+    }
+}
+
+/* --- Desktop Refinements --- */
 @media (min-width: 768px) {
-    /* Header */
     .main-nav {
         display: flex;
         gap: 2rem;
     }
+    
     .main-nav a {
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
+
     #menu-trigger {
         display: none;
     }
 
-    /* Hero */
     .hero-content {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: center;
         text-align: left;
     }
+
     .hero-text-wrap {
         order: 1;
         text-align: left;
+        padding-right: var(--spacing-md);
     }
+
     .hero-image-container {
         order: 2;
-        height: 500px;
-    }
-    .hero h1 {
-        font-size: 5rem;
+        height: 550px;
     }
 
-    /* Newsletter */
+    .hero-title {
+        font-size: clamp(4rem, 6vw, 6.5rem);
+    }
+
     .newsletter-form {
         flex-direction: row;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    /* Footer */
     .footer-grid {
         grid-template-columns: 2fr 1fr 1fr 1fr;
-        gap: var(--spacing-md);
     }
+
     .footer-bottom {
         flex-direction: row;
         justify-content: space-between;
-        text-align: left;
+    }
+}
+
+/* --- Large Desktop / Ultra-wide --- */
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1300px;
+    }
+    
+    .hero-title {
+        font-size: 7rem;
+    }
+}
+
+/* --- Optimization for reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-delay: -1ms !important;
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        background-attachment: initial !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0s !important;
+        transition-delay: 0s !important;
     }
 }

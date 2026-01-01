@@ -1,5 +1,6 @@
 /**
  * AeroStride Shoe Store - Optimized Logic Script
+ * Features: Persistent Cart, Dynamic Rendering, and Smart Navigation Observer
  */
 
 // ==========================================
@@ -12,9 +13,12 @@ async function loadProducts() {
     try {
         const response = await fetch('assets/products.json');
         window.products = await response.json();
+        // Render only if the grid exists on the current page
         if (document.getElementById('product-grid')) window.renderProducts();
     } catch (error) {
         console.error("Error loading products:", error);
+        const grid = document.getElementById('product-grid');
+        if (grid) grid.innerHTML = '<p>Unable to load products. Please try again later.</p>';
     }
 }
 
@@ -101,7 +105,7 @@ window.renderProducts = function(filter = 'all') {
         card.className = 'product-card';
         card.innerHTML = `
             <div class="card-image">
-                <img src="${product.image}" alt="${product.name}">
+                <img src="${product.image}" alt="${product.name}" loading="lazy">
                 <div class="card-actions">
                     <button class="action-btn" onclick="window.addToCart(${product.id})">
                          <span class="material-symbols-rounded">add_shopping_cart</span>
@@ -137,27 +141,27 @@ window.closeMenu = () => toggleDrawer('menu-overlay', 'menu-drawer', false);
 // ==========================================
 function initNavigationObserver() {
     const navLinks = document.querySelectorAll('.main-nav a, .mobile-menu-links a');
-    const page = window.location.pathname.split("/").pop() || 'index';
+    const page = window.location.pathname.split("/").pop().replace('.html', '') || 'index';
 
     const updateActiveLinks = (targetHref) => {
         navLinks.forEach(link => {
-            const href = link.getAttribute('href');
+            const href = link.getAttribute('href').replace('.html', '');
             
-            // IGNORE #SHOP: Do not apply active class if it's an internal hash link
+            // 1. Skip logic for hash links (e.g., #shop)
             if (href.startsWith('#')) {
                 link.classList.remove('active');
                 return;
             }
 
-            // Standard Page Matching
+            // 2. Check if link matches current page
             const isActive = (href === targetHref) || 
-                             (targetHref === 'index' && (href === 'index' || href === './'));
+                             (targetHref === 'index' && (href === 'index' || href === './' || href === ''));
+            
             link.classList.toggle('active', isActive);
         });
     };
 
-    // Observer for Top Sentinel (Resets to Home/Current Page)
-    // Only watches the very top of the page to reset the Home underline
+    // Observer: Watches the top of the page to reset the "Active" state to the page default
     const topObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) updateActiveLinks(page);
@@ -176,12 +180,15 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartUI();
     initNavigationObserver();
 
+    // Reveal page after a tiny delay for smooth entry
     setTimeout(() => document.body.classList.add('js-page-loaded'), 100);
 
+    // Header scroll background effect
     window.addEventListener('scroll', () => {
         document.getElementById('header')?.classList.toggle('scrolled', window.scrollY > 50);
     }, { passive: true });
 
+    // Global click listener for Cart/Menu triggers and Smooth Scrolling
     document.addEventListener('click', (e) => {
         const target = e.target;
 
@@ -190,17 +197,18 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const internalLink = target.closest('a[href^="#"]');
         if (internalLink) {
-            const section = document.querySelector(internalLink.getAttribute('href'));
+            const href = internalLink.getAttribute('href');
+            const section = document.querySelector(href);
             if (section) {
                 e.preventDefault();
                 window.closeMenu();
                 section.scrollIntoView({ behavior: 'smooth' });
-                // Note: Active status for #shop is explicitly not applied here anymore
-                history.pushState(null, null, internalLink.getAttribute('href'));
+                history.pushState(null, null, href);
             }
         }
     });
 
+    // Setup Close Buttons
     const closeTargets = [
         { btn: 'close-cart', overlay: 'cart-overlay', fn: window.closeCart },
         { btn: 'close-menu', overlay: 'menu-overlay', fn: window.closeMenu }
@@ -211,5 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(target.overlay)?.addEventListener('click', target.fn);
     });
 
+    // Handle browser back/forward buttons
     window.addEventListener('popstate', initNavigationObserver);
 });
